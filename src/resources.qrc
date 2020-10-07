@@ -1,5 +1,5 @@
-<!DOCTYPE RCC><RCC version="1.0">
-    <qresource prefix='/'>
-        <file>../src/forms/stylesheet.qss</file>
+<RCC>
+    <qresource prefix="/res">
+        <file>forms/stylesheet.qss</file>
     </qresource>
 </RCC>
