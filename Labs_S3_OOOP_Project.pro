@@ -10,10 +10,12 @@ CONFIG += c++11
 
 SOURCES += \
     'src/main.cpp' \
-    'src/forms/mainwindow.cpp'
+    'src/forms/mainwindow.cpp' \
+    src/Executor/executor.cpp
 
 HEADERS += \
-    'src/forms/mainwindow.hpp'
+    'src/forms/mainwindow.hpp' \
+    src/Executor/executor.hpp
 
 FORMS += \
     'src/forms/mainwindow.ui'
