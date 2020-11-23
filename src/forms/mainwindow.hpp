@@ -2,6 +2,10 @@
 #define MAINWINDOW_HPP
 
 #include <QMainWindow>
+#include <QString>
+#include <QFileDialog>
+
+#include "src/Executor/executor.hpp"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -17,6 +21,10 @@ public:
 
 private slots:
     void on_pushButton_urlSearch_clicked();
+
+    void on_pushButton_Cut_clicked();
+
+    void on_pushButton_browse_clicked();
 
 private:
     Ui::MainWindow *ui;
