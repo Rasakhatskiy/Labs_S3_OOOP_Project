@@ -1,4 +1,5 @@
 #include "forms/mainwindow.hpp"
+#include "forms/MainWindow/startwindow.hpp"
 
 #include <QApplication>
 #include <QFile>
@@ -7,7 +8,7 @@
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-    MainWindow w;
+    StartWindow w;
     //w.setWindowFlags(Qt::Window | Qt::FramelessWindowHint);
     w.show();
 

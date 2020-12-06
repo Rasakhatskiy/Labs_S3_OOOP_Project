@@ -11,14 +11,19 @@ CONFIG += c++11
 SOURCES += \
     'src/main.cpp' \
     'src/forms/mainwindow.cpp' \
-    src/Executor/executor.cpp
+    src/Executor/executor.cpp \
+    src/Model/model.cpp \
+    src/forms/MainWindow/startwindow.cpp
 
 HEADERS += \
     'src/forms/mainwindow.hpp' \
-    src/Executor/executor.hpp
+    src/Executor/executor.hpp \
+    src/Model/model.hpp \
+    src/forms/MainWindow/startwindow.hpp
 
 FORMS += \
-    'src/forms/mainwindow.ui'
+    'src/forms/mainwindow.ui' \
+    src/forms/MainWindow/startwindow.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
