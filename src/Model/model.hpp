@@ -28,6 +28,20 @@ public:
      * \return Path of temp file if succeeded, NULL if not.
      */
     static QString downloadAudio(const QString& url);
+
+    /*!
+     * \brief Crops downloaded audio with given parameters and converts to mp3.
+     * \param path Path of the downloaded file.
+     * \param from Time code from where to cut, e.g. 01:55.3, 0, 3600, etc.
+     * \param to Time code where to cut, e.g. 01:55.3, 0, 3600, etc.
+     * \param resultName Desired cropped file name
+     * \return Cropped file name.
+     */
+    static QString cropAudio(
+            const QString& path,
+            const QString& from,
+            const QString& to,
+            const QString& resultName);
 };
 
 #endif // MODEL_HPP

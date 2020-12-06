@@ -51,3 +51,37 @@ QString Model::downloadAudio(const QString& url)
             return resultFilePath;
     }
 }
+
+QString Model::cropAudio(const QString &path, const QString &from, const QString &to, const QString &resultName)
+{
+    const QString APP_NAME = "youtube-dl";
+    const QString CODEC_INFO = "-c:a libmp3lame -q:a 8";
+    //<< "-c:a" <<  "libmp3lame" << "-q:a" << "8"
+
+    QStringList arguments;
+    arguments
+            << "-ss"
+            << from
+            << "-to"
+            << to
+            << "-i"
+            << path
+            << CODEC_INFO
+            << resultName;
+
+    if (QFileInfo::exists(path))
+        QFile::remove(path);
+
+    if (!QFileInfo::exists(resultName))
+    {
+        return NULL;
+    }
+    else
+    {
+        QFileInfo fileInfo(resultName);
+        if (fileInfo.size() == 0)
+            return NULL;
+        else
+            return resultName;
+    }
+}
