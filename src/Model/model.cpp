@@ -14,7 +14,7 @@ void Model::executeProcess(
 {
     qDebug() << app + " " + arguments.join(" ");
     process.start(app, arguments);
-    process.waitForFinished();
+    process.waitForFinished(-1);
 }
 
 void Model::removeFileIfExists(const QString &path)
@@ -60,26 +60,24 @@ QString Model::downloadVideo(const QString& url)
     auto workingDir = QCoreApplication::applicationDirPath();
     process.setWorkingDirectory(workingDir);
 
-    QStringList arguments_1;
-    arguments_1
-            << "-f"
-            << FORMAT_AUDIO
-            << "-o"
-            << TEMP_PATH_AUDIO
-            << url;
+    QStringList arguments_1
+    {
+        "-f", FORMAT_AUDIO,
+        "-o", TEMP_PATH_AUDIO,
+        url
+    };
     executeProcess(process, APP_NAME_YOUTUBE, arguments_1);
     auto resultFilePathTA = QCoreApplication::applicationDirPath() + "\\" + TEMP_PATH_AUDIO;
     if (!fileExists(resultFilePathTA)) return NULL;
 
 
 
-    QStringList arguments_2;
-    arguments_2
-            << "-f"
-            << FORMAT_VIDEO
-            << "-o"
-            << TEMP_PATH_VIDEO
-            << url;
+    QStringList arguments_2
+    {
+        "-f", FORMAT_VIDEO,
+        "-o", TEMP_PATH_VIDEO,
+        url
+    };
     executeProcess(process, APP_NAME_YOUTUBE, arguments_2);
     auto resultFilePathTV = QCoreApplication::applicationDirPath() + "\\" + TEMP_PATH_VIDEO;
     if (!fileExists(resultFilePathTV)) return NULL;
@@ -87,15 +85,16 @@ QString Model::downloadVideo(const QString& url)
 
 
     //ffmpeg -i video.mp4 -i audio.m4a -acodec copy -vcodec copy output.mp4
-    QStringList arguments_3;
-    arguments_3
-            << "-i"
-            << TEMP_PATH_VIDEO
-            << "-i"
-            << TEMP_PATH_AUDIO
-            << "-acodec copy -vcodec copy"
-            << TEMP_PATH_COMBINED;
+    QStringList arguments_3
+    {
+        "-i", TEMP_PATH_VIDEO,
+        "-i", TEMP_PATH_AUDIO,
+        "-acodec", "copy", "-vcodec", "copy",
+        TEMP_PATH_COMBINED
+    };
     executeProcess(process, APP_NAME_FFMPEG, arguments_3);
+
+
     auto resultFilePathTC = QCoreApplication::applicationDirPath() + "\\" + TEMP_PATH_COMBINED;
     if (!fileExists(resultFilePathTC)) return NULL;
 
