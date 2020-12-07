@@ -29,6 +29,22 @@ void StartWindow::on_pushButton_ExtractAudio_clicked()
         msgBox.setText("File downloaded.");
         msgBox.exec();
     }
+}
 
-
+void StartWindow::on_pushButton_ExtractVideo_clicked()
+{
+    auto path = Model::downloadVideo(ui->lineEdit->text());
+    if (path == NULL)
+    {
+        QMessageBox msgBox;
+        msgBox.setWindowTitle("File download");
+        msgBox.setText("Unable to download video. Check the url or try again.");
+        msgBox.exec();
+    }
+    else
+    {
+        QMessageBox msgBox;
+        msgBox.setText("File downloaded.");
+        msgBox.exec();
+    }
 }

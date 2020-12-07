@@ -7,9 +7,103 @@ Model::Model()
 
 }
 
+void Model::executeProcess(
+        QProcess& process,
+        const QString &app,
+        const QStringList &arguments)
+{
+    qDebug() << app + " " + arguments.join(" ");
+    process.start(app, arguments);
+    process.waitForFinished();
+}
+
+void Model::removeFileIfExists(const QString &path)
+{
+    if (QFileInfo::exists(path))
+        QFile::remove(path);
+}
+
+bool Model::fileExists(const QString &path)
+{
+    if (!QFileInfo::exists(path))
+    {
+        return false;
+    }
+    else
+    {
+        QFileInfo fileInfo(path);
+        if (fileInfo.size() == 0)
+            return false;
+        else
+            return true;
+    }
+}
+
 QString Model::downloadVideo(const QString& url)
 {
-    return NULL;
+    const QString APP_NAME_YOUTUBE = "youtube-dl";
+    const QString APP_NAME_FFMPEG = "ffmpeg";
+
+    const QString FORMAT_AUDIO = "bestaudio";
+    const QString FORMAT_VIDEO = "bestvideo";
+
+    const QString TEMP_PATH_AUDIO = "video_temp_a.m4a";
+    const QString TEMP_PATH_VIDEO = "video_temp_v.mp4";
+
+    const QString TEMP_PATH_COMBINED = "video_temp_combined.mp4";
+
+    removeFileIfExists(TEMP_PATH_AUDIO);
+    removeFileIfExists(TEMP_PATH_VIDEO);
+    removeFileIfExists(TEMP_PATH_COMBINED);
+
+    QProcess process;
+    auto workingDir = QCoreApplication::applicationDirPath();
+    process.setWorkingDirectory(workingDir);
+
+    QStringList arguments_1;
+    arguments_1
+            << "-f"
+            << FORMAT_AUDIO
+            << "-o"
+            << TEMP_PATH_AUDIO
+            << url;
+    executeProcess(process, APP_NAME_YOUTUBE, arguments_1);
+    auto resultFilePathTA = QCoreApplication::applicationDirPath() + "\\" + TEMP_PATH_AUDIO;
+    if (!fileExists(resultFilePathTA)) return NULL;
+
+
+
+    QStringList arguments_2;
+    arguments_2
+            << "-f"
+            << FORMAT_VIDEO
+            << "-o"
+            << TEMP_PATH_VIDEO
+            << url;
+    executeProcess(process, APP_NAME_YOUTUBE, arguments_2);
+    auto resultFilePathTV = QCoreApplication::applicationDirPath() + "\\" + TEMP_PATH_VIDEO;
+    if (!fileExists(resultFilePathTV)) return NULL;
+
+
+
+    //ffmpeg -i video.mp4 -i audio.m4a -acodec copy -vcodec copy output.mp4
+    QStringList arguments_3;
+    arguments_3
+            << "-i"
+            << TEMP_PATH_VIDEO
+            << "-i"
+            << TEMP_PATH_AUDIO
+            << "-acodec copy -vcodec copy"
+            << TEMP_PATH_COMBINED;
+    executeProcess(process, APP_NAME_FFMPEG, arguments_3);
+    auto resultFilePathTC = QCoreApplication::applicationDirPath() + "\\" + TEMP_PATH_COMBINED;
+    if (!fileExists(resultFilePathTC)) return NULL;
+
+
+    removeFileIfExists(resultFilePathTA);
+    removeFileIfExists(resultFilePathTV);
+
+    return resultFilePathTC;
 }
 
 QString Model::downloadAudio(const QString& url)
@@ -32,24 +126,8 @@ QString Model::downloadAudio(const QString& url)
     QProcess process;
     process.setWorkingDirectory(QCoreApplication::applicationDirPath());
     auto resultFilePath = QCoreApplication::applicationDirPath() + "\\" +TEMP_PATH_AUDIO;
-
-    qDebug() << APP_NAME + " " + arguments.join(" ");
-
-    process.start(APP_NAME, arguments);
-    process.waitForFinished();
-
-    if (!QFileInfo::exists(resultFilePath))
-    {
-        return NULL;
-    }
-    else
-    {
-        QFileInfo fileInfo(resultFilePath);
-        if (fileInfo.size() == 0)
-            return NULL;
-        else
-            return resultFilePath;
-    }
+    executeProcess(process, APP_NAME, arguments);
+    return fileExists(resultFilePath) ? resultFilePath : NULL;
 }
 
 QString Model::cropAudio(const QString &path, const QString &from, const QString &to, const QString &resultName)

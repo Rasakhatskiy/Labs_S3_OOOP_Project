@@ -21,6 +21,8 @@ public:
 private slots:
     void on_pushButton_ExtractAudio_clicked();
 
+    void on_pushButton_ExtractVideo_clicked();
+
 private:
     Ui::StartWindow *ui;
 };

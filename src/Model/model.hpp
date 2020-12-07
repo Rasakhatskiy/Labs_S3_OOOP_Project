@@ -15,26 +15,40 @@ class Model
 public:
     Model();
 
+    static void executeProcess(
+            QProcess& process,
+            const QString& app,
+            const QStringList& arguments);
+
+    static void removeFileIfExists(const QString &path);
+
+    /*!
+     * \brief Checks if file exists and it's size != 0
+     * \param[in] path File path
+     * \return True if exists and length != 0 else false
+     */
+    static bool fileExists(const QString& path);
+
     /*!
      * \brief Downloads video from youtube, saves it to temp file and returns it's name.
-     * \param url Youtube video url.
+     * \param[in] url Youtube video url.
      * \return Path of temp file if succeeded, NULL if not.
      */
     static QString downloadVideo(const QString& url);
 
     /*!
      * \brief Downloads audio from youtube, saves it to temp file and returns it's name.
-     * \param url Youtube video url.
+     * \param[in] url Youtube video url.
      * \return Path of temp file if succeeded, NULL if not.
      */
     static QString downloadAudio(const QString& url);
 
     /*!
      * \brief Crops downloaded audio with given parameters and converts to mp3.
-     * \param path Path of the downloaded file.
-     * \param from Time code from where to cut, e.g. 01:55.3, 0, 3600, etc.
-     * \param to Time code where to cut, e.g. 01:55.3, 0, 3600, etc.
-     * \param resultName Desired cropped file name
+     * \param[in] path Path of the downloaded file.
+     * \param[in] from Time code from where to cut, e.g. 01:55.3, 0, 3600, etc.
+     * \param[in] to Time code where to cut, e.g. 01:55.3, 0, 3600, etc.
+     * \param[in] resultName Desired cropped file name
      * \return Cropped file name.
      */
     static QString cropAudio(
