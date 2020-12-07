@@ -4,6 +4,7 @@
 #include <QDialog>
 #include <QMessageBox>
 
+#include "src/forms/CropAudio/cropaudio.hpp"
 #include "src/Model/model.hpp"
 
 namespace Ui {
@@ -24,6 +25,7 @@ private slots:
     void on_pushButton_ExtractVideo_clicked();
 
 private:
+
     Ui::StartWindow *ui;
 };
 

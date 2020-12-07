@@ -7,6 +7,8 @@
 #include <QCoreApplication>
 #include <QFileInfo>
 #include <QDebug>
+#include <QTime>
+#include <QDateTime>
 
 
 class Model
@@ -21,6 +23,8 @@ public:
             const QStringList& arguments);
 
     static void removeFileIfExists(const QString &path);
+
+    static QTime getFileDuration(const QString &path);
 
     /*!
      * \brief Checks if file exists and it's size != 0

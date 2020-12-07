@@ -23,6 +23,33 @@ void Model::removeFileIfExists(const QString &path)
         QFile::remove(path);
 }
 
+QTime Model::getFileDuration(const QString &path)
+{
+    //ffprobe -v error -show_entries format=duration -sexagesimal -of default=noprint_wrappers=1:nokey=1 audio_temp.m4a
+    const QString APP_NAME = "ffprobe";
+    QStringList arguments
+    {
+        "-v", "error", "-show_entries",
+        "format=duration", "-sexagesimal",
+        "-of", "default=noprint_wrappers=1:nokey=1",
+        path
+    };
+
+    QProcess process;
+    process.setWorkingDirectory(QCoreApplication::applicationDirPath());
+    auto result = process.readAllStandardOutput();
+
+    try
+    {
+        QTime time = QTime::fromString(result, "HH:mm:ss.zzzzzz");
+        return time;
+    }
+    catch (...)
+    {
+    }
+    return QTime();
+}
+
 bool Model::fileExists(const QString &path)
 {
     if (!QFileInfo::exists(path))
@@ -129,36 +156,29 @@ QString Model::downloadAudio(const QString& url)
     return fileExists(resultFilePath) ? resultFilePath : NULL;
 }
 
-QString Model::cropAudio(const QString &path, const QString &from, const QString &to, const QString &resultName)
+QString Model::cropAudio(
+        const QString &path,
+        const QString &from,
+        const QString &to,
+        const QString &resultName)
 {
-    const QString APP_NAME = "youtube-dl";
-    const QString CODEC_INFO = "-c:a libmp3lame -q:a 8";
-    //<< "-c:a" <<  "libmp3lame" << "-q:a" << "8"
+    const QString APP_NAME = "ffmpeg";
 
-    QStringList arguments;
-    arguments
-            << "-ss"
-            << from
-            << "-to"
-            << to
-            << "-i"
-            << path
-            << CODEC_INFO
-            << resultName;
+    removeFileIfExists(resultName);
 
-    if (QFileInfo::exists(path))
-        QFile::remove(path);
-
-    if (!QFileInfo::exists(resultName))
+    QStringList arguments
     {
-        return NULL;
-    }
-    else
-    {
-        QFileInfo fileInfo(resultName);
-        if (fileInfo.size() == 0)
-            return NULL;
-        else
-            return resultName;
-    }
+        "-ss", from, "-to", to,
+        "-i", path,
+        "-c:a", "libmp3lame", "-q:a", "8",
+        resultName
+    };
+
+    QProcess process;
+    process.setWorkingDirectory(QCoreApplication::applicationDirPath());
+
+    auto resultFilePath = QCoreApplication::applicationDirPath() + "\\" + resultName;
+    executeProcess(process, APP_NAME, arguments);
+
+    return fileExists(resultName) ? resultName : NULL;
 }
