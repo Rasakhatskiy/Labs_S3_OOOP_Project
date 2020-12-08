@@ -25,10 +25,8 @@ void StartWindow::on_pushButton_ExtractAudio_clicked()
     }
     else
     {
-        QMessageBox msgBox;
-        msgBox.setText("File downloaded.");
-        msgBox.exec();
-
+        auto dialog = new CropFileForm(path, true);
+        dialog->show();
     }
 }
 
@@ -44,8 +42,7 @@ void StartWindow::on_pushButton_ExtractVideo_clicked()
     }
     else
     {
-        QMessageBox msgBox;
-        msgBox.setText("File downloaded.");
-        msgBox.exec();
+        auto dialog = new CropFileForm(path, false);
+        dialog->show();
     }
 }

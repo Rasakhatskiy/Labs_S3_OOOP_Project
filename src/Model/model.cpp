@@ -17,10 +17,15 @@ void Model::executeProcess(
     process.waitForFinished(-1);
 }
 
-void Model::removeFileIfExists(const QString &path)
+void Model::removeFileIfExists(
+        const QString &path,
+        const bool& isRelative = true)
 {
-    if (QFileInfo::exists(path))
-        QFile::remove(path);
+    auto absolute = isRelative ?
+        QCoreApplication::applicationDirPath() + "\\" + path :
+        path;
+    if (QFileInfo::exists(absolute))
+        QFile::remove(absolute);
 }
 
 QTime Model::getFileDuration(const QString &path)
@@ -138,16 +143,14 @@ QString Model::downloadAudio(const QString& url)
     const QString FORMAT_AUDIO = "bestaudio";
     const QString TEMP_PATH_AUDIO = "audio_temp.m4a";
 
-    if (QFileInfo::exists(TEMP_PATH_AUDIO))
-        QFile::remove(TEMP_PATH_AUDIO);
+    removeFileIfExists(TEMP_PATH_AUDIO);
 
-    QStringList arguments;
-    arguments
-            << "-f"
-            << FORMAT_AUDIO
-            << "-o"
-            << TEMP_PATH_AUDIO
-            << url;
+    QStringList arguments
+    {
+        "-f", FORMAT_AUDIO,
+        "-o", TEMP_PATH_AUDIO,
+        url
+    };
 
     QProcess process;
     process.setWorkingDirectory(QCoreApplication::applicationDirPath());
@@ -164,15 +167,43 @@ QString Model::cropAudio(
 {
     const QString APP_NAME = "ffmpeg";
 
-    removeFileIfExists(resultName);
+    removeFileIfExists(resultName, false);
+    auto info = QFileInfo(path);
+    auto name = info.fileName();
 
-    QStringList arguments
-    {
-        "-ss", from, "-to", to,
-        "-i", path,
+    QStringList arguments;
+    arguments << "-ss" << (from == NULL ? "0" : from);
+    if (to != NULL) arguments << "-to" << to;
+    arguments.append({
+        "-i", name,
         "-c:a", "libmp3lame", "-q:a", "8",
         resultName
-    };
+    });
+
+    QProcess process;
+    process.setWorkingDirectory(QCoreApplication::applicationDirPath());
+
+    auto resultFilePath = QCoreApplication::applicationDirPath() + "\\" + resultName;
+    executeProcess(process, APP_NAME, arguments);
+
+    return fileExists(resultName) ? resultName : NULL;
+}
+
+QString Model::cropVideo(const QString &path, const QString &from, const QString &to, const QString &resultName)
+{
+    const QString APP_NAME = "ffmpeg";
+
+    removeFileIfExists(resultName, false);
+    auto info = QFileInfo(path);
+    auto name = info.fileName();
+
+    QStringList arguments;
+    arguments << "-ss" << (from == NULL ? "0" : from);
+    if (to != NULL) arguments << "-to" << to;
+    arguments.append({
+        "-i", name,
+        resultName
+    });
 
     QProcess process;
     process.setWorkingDirectory(QCoreApplication::applicationDirPath());

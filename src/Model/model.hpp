@@ -22,7 +22,9 @@ public:
             const QString& app,
             const QStringList& arguments);
 
-    static void removeFileIfExists(const QString &path);
+    static void removeFileIfExists(
+            const QString &path,
+            const bool& isRelative);
 
     static QTime getFileDuration(const QString &path);
 
@@ -56,6 +58,12 @@ public:
      * \return Cropped file name.
      */
     static QString cropAudio(
+            const QString& path,
+            const QString& from,
+            const QString& to,
+            const QString& resultName);
+
+    static QString cropVideo(
             const QString& path,
             const QString& from,
             const QString& to,

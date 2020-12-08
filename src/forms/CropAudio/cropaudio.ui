@@ -7,11 +7,11 @@
     <x>0</x>
     <y>0</y>
     <width>222</width>
-    <height>230</height>
+    <height>203</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Dialog</string>
+   <string>Crop file</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
@@ -35,8 +35,11 @@
        <verstretch>0</verstretch>
       </sizepolicy>
      </property>
+     <property name="buttonSymbols">
+      <enum>QAbstractSpinBox::NoButtons</enum>
+     </property>
      <property name="displayFormat">
-      <string>HH:mm:ss.zz</string>
+      <string>HH:mm:ss.zzz</string>
      </property>
     </widget>
    </item>
@@ -81,8 +84,14 @@
        <verstretch>0</verstretch>
       </sizepolicy>
      </property>
+     <property name="buttonSymbols">
+      <enum>QAbstractSpinBox::NoButtons</enum>
+     </property>
+     <property name="correctionMode">
+      <enum>QAbstractSpinBox::CorrectToNearestValue</enum>
+     </property>
      <property name="displayFormat">
-      <string>HH:mm:ss.zz</string>
+      <string>HH:mm:ss.zzz</string>
      </property>
     </widget>
    </item>
@@ -103,13 +112,6 @@
     <widget class="Line" name="line_2">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
-     </property>
-    </widget>
-   </item>
-   <item>
-    <widget class="QProgressBar" name="progressBar">
-     <property name="value">
-      <number>47</number>
      </property>
     </widget>
    </item>
