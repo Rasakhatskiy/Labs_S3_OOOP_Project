@@ -16,11 +16,20 @@ namespace Ui {
 class CropAudio;
 }
 
+/*!
+ * \brief The CropFileForm class made for selecting time range and cropping video and audio files.
+ */
 class CropFileForm : public QDialog
 {
     Q_OBJECT
 
 public:
+    /*!
+     * \brief CropFileForm
+     * \param[in] path Path of the temp file for cropping.
+     * \param[in] isAudio Is it audio or video.
+     * \param parent
+     */
     explicit CropFileForm(
             const QString& path,
             const bool& isAudio,
@@ -36,11 +45,29 @@ private slots:
 
 private:
 
+    /*!
+     * \brief Reads time codes from form and launches model for cropping audio.
+     */
     void cropAudio();
+
+    /*!
+     * \brief Reads time codes from form and launches model for cropping video.
+     */
     void cropVideo();
 
+    /*!
+     * \brief path of the temp file for crop.
+     */
     QString tempPath;
+
+    /*!
+     * \brief is this file audio or video.
+     */
     bool isAudio;
+
+    /*!
+     * \brief form
+     */
     Ui::CropAudio *ui;
 };
 

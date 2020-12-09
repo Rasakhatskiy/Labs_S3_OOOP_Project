@@ -10,22 +10,41 @@
 #include <QTime>
 #include <QDateTime>
 
-
+/*!
+ * \brief The Model class made for viadeo and audio files operations.
+ * Uses ffmeg and youtube-dl library
+ */
 class Model
 {
     const QString TEMP_PATH_VIDEO = "video_temp.m4a";
 public:
     Model();
 
+    /*!
+     * \brief Executes external process and waits for it to finish.
+     * \param process Process
+     * \param app Application name
+     * \param arguments Arguments
+     */
     static void executeProcess(
             QProcess& process,
             const QString& app,
             const QStringList& arguments);
 
+    /*!
+     * \brief Deletes file if it exists.
+     * \param Path of the file
+     * \param isRelative is this path relative or absolute
+     */
     static void removeFileIfExists(
             const QString &path,
             const bool& isRelative);
 
+    /*!
+     * \brief returns video duration from ffmpeg
+     * \param path Path of the file
+     * \return
+     */
     static QTime getFileDuration(const QString &path);
 
     /*!
@@ -63,6 +82,14 @@ public:
             const QString& to,
             const QString& resultName);
 
+    /*!
+     * \brief Crops downloaded video with given parameters and converts to mp3.
+     * \param[in] path Path of the downloaded file.
+     * \param[in] from Time code from where to cut, e.g. 01:55.3, 0, 3600, etc.
+     * \param[in] to Time code where to cut, e.g. 01:55.3, 0, 3600, etc.
+     * \param[in] resultName Desired cropped file name
+     * \return Cropped file name.
+     */
     static QString cropVideo(
             const QString& path,
             const QString& from,

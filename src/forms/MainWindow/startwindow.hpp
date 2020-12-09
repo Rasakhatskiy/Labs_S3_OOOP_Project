@@ -11,6 +11,9 @@ namespace Ui {
 class StartWindow;
 }
 
+/*!
+ * \brief The StartWindow class for window where you can type youtube link and select what to extract - video or audio.
+ */
 class StartWindow : public QDialog
 {
     Q_OBJECT
